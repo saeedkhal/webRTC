@@ -9,8 +9,8 @@ function App() {
     <Wrapper className="App">
       <main>
         <Dashboard />
-        <Messanger />
         <VideoCall />
+        <Messanger />
       </main>
     </Wrapper>
   );
@@ -19,7 +19,7 @@ function App() {
 const Wrapper = styled.div`
   main {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr;
     height: 100vh;
   }
 `;

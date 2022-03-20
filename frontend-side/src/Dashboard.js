@@ -61,6 +61,7 @@ const Dashboard = () => {
 
 const Wrapper = styled.div`
   section {
+    border-radius: 2px;
     padding: 20px;
     background: rgb(2, 0, 36);
     background: linear-gradient(
@@ -110,8 +111,6 @@ const Wrapper = styled.div`
       line-height: 2;
       input {
         border: 2px solid transparent;
-        margin-left: 20px;
-        float: right;
         background: transparent;
         color: white;
         border: 1px solid #8f9bd0;
@@ -124,16 +123,16 @@ const Wrapper = styled.div`
       }
     }
     .chat-call {
-      margin-top: 20px;
+      margin-top: 5px;
       display: flex;
       justify-content: space-between;
-      margin-top: 50px;
+      margin-top: 20px;
       align-items: center;
       button {
         background: white;
         padding: 10px;
         border: none;
-        width: 150px;
+        width: 120px;
         border-radius: 8px;
         display: flex;
         justify-content: space-evenly;
@@ -148,7 +147,7 @@ const Wrapper = styled.div`
       margin-top: 0;
     }
     .checkbox {
-      margin-top: 20px;
+      margin-top: 50px;
       outline: none !important;
       text-transform: capitalize;
       label {
