@@ -8,7 +8,7 @@ import { RiRecordCircleFill, RiCameraSwitchLine } from 'react-icons/ri';
 const VideoCall = () => {
   return (
     <Wrapper>
-      <main>
+      <div>
         <section className="starter-bg">
           <span className="starter-icon">
             <BsPersonCircle />
@@ -38,12 +38,12 @@ const VideoCall = () => {
             </button>
           </scetion>
         </section>
-      </main>
+      </div>
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
-  main {
+  div {
     position: relative;
     height: 100vh;
     .starter-bg {
