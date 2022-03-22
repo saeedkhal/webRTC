@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { MdOutlineContentCopy } from 'react-icons/md';
 import { GiBrain } from 'react-icons/gi';
 import { MdChat } from 'react-icons/md';
 import { BiVideoRecording } from 'react-icons/bi';
+import { AppContext } from '../Context';
+import { io } from 'socket.io-client';
 
 const Dashboard = () => {
+  const AppGlobalData = useContext(AppContext);
+
+  useEffect(() => {
+    const socket = io('ws://127.0.0.1:1024');
+    socket.on('connect', () => {
+      console.log('socket connected');
+      AppGlobalData.upadteSocketId(socket.id);
+    });
+  }, []);
+  const soketId = useRef();
+  const copyText = () => {
+    navigator.clipboard.writeText(soketId.current.innerHTML);
+  };
   return (
     <Wrapper>
       <section className="ccc">
@@ -17,8 +32,8 @@ const Dashboard = () => {
         <div className="personal-code">
           <p className="personal-code-header">your personal code</p>
           <p>
-            <span>hjbbfdndnknz5sg</span>
-            <button className="copy-icon">
+            <span ref={soketId}>{AppGlobalData.state.sockitId}</span>
+            <button onClick={copyText} className="copy-icon">
               <MdOutlineContentCopy />
             </button>
           </p>
@@ -100,6 +115,10 @@ const Wrapper = styled.div`
           cursor: pointer;
           color: white;
           font-size: 20px;
+          transition: 0.3s;
+          &:hover {
+            color: orange;
+          }
         }
       }
     }
