@@ -45,7 +45,6 @@ const VideoCall = () => {
 const Wrapper = styled.div`
   div {
     position: relative;
-    height: 100vh;
     .starter-bg {
       border: 10px solid white;
       box-sizing: border-box;

@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Dashboard from './Dashboard';
-import Messanger from './Messanger';
-import VideoCall from './VideoCall';
+import Dashboard from './Components/Dashboard';
+import Messanger from './Components/Messanger';
+import VideoCall from './Components/VideoCall';
+import CallRequest from './Components/CallRequest';
+
 function App() {
   return (
     <Wrapper className="App">
@@ -11,6 +13,7 @@ function App() {
         <Dashboard />
         <VideoCall />
         <Messanger />
+        <CallRequest />
       </main>
     </Wrapper>
   );
@@ -18,9 +21,10 @@ function App() {
 
 const Wrapper = styled.div`
   main {
+    position: relative;
+    max-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    height: 100vh;
   }
 `;
 export default App;

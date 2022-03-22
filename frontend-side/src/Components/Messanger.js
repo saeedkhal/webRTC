@@ -92,8 +92,8 @@ const Wrapper = styled.div`
           border: none;
           font-size: 20px;
           cursor: pointer;
-          margin-left:10px;
-]        }
+          margin-left: 10px;
+        }
       }
     }
   }
