@@ -6,22 +6,17 @@
   git clone this is link 
 ```
 2.run the server
-  * ```sh
+-grt into server folder
+  ```sh
   cd server
    ```
-  * ```sh
+-install dependancy
+  ```sh
     npm install 
-    ```
-  * ```sh
+  ```
+-install finally run server
+  ```sh
     nodemon server.js 
     ```
-  3.run the fornt end 
-  * ```sh
-    cd .. 
-    ```
-  * ```sh
-    npm install 
-    ```
-  * ```sh
-    NPM  start 
+rt 
     ```
