@@ -46,7 +46,7 @@ export const AppProvider = ({ children }) => {
     screenSharingAcrive: false,
     allowConnectionFromStrangers: false,
   });
-
+  const [socket, setSocket] = useState();
   return (
     <AppContext.Provider
       value={{
@@ -57,6 +57,8 @@ export const AppProvider = ({ children }) => {
         upadteScreenSharing,
         updateScreenSharingAcrive,
         UpdateAllowConnectionFromStrangers,
+        socket,
+        setSocket,
       }}
     >
       {children}

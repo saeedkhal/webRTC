@@ -5,6 +5,7 @@ import { MdOutlineContentCopy } from 'react-icons/md';
 import { GiBrain } from 'react-icons/gi';
 import { MdChat } from 'react-icons/md';
 import { BiVideoRecording } from 'react-icons/bi';
+import { AiFillExclamationCircle } from 'react-icons/ai';
 import { AppContext } from '../Context';
 import { io } from 'socket.io-client';
 
@@ -13,15 +14,42 @@ const Dashboard = () => {
 
   useEffect(() => {
     const socket = io('ws://127.0.0.1:1024');
+
     socket.on('connect', () => {
       console.log('socket connected');
       AppGlobalData.upadteSocketId(socket.id);
+      AppGlobalData.setSocket(socket);
+      socket.on('pre-offer', (data) => {
+        console.log(data);
+      });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const soketId = useRef();
-  const copyText = () => {
-    navigator.clipboard.writeText(soketId.current.innerHTML);
+
+  const mySoket = useRef();
+  const inputPersonalCode = useRef();
+  const callee = useRef();
+
+  const cnnectionTypes = {
+    chat: 'chat',
+    video: 'video',
+    chatStanger: 'chatStanger',
+    videoStranger: 'videoStranger',
   };
+  const copyText = () => {
+    navigator.clipboard.writeText(mySoket.current.innerHTML);
+  };
+  const sendChatOffer = () => {
+    const calleeId = callee.current.value;
+    const data = {
+      connectionType: cnnectionTypes.chat,
+      calleeId: calleeId,
+    };
+    AppGlobalData.socket.emit('pre-offer', data);
+  };
+  const sendVideoOffer = () => {};
+  const sendStrangerChatOffer = () => {};
+  const sendStrangerVideoOffer = () => {};
   return (
     <Wrapper>
       <section className="ccc">
@@ -32,18 +60,28 @@ const Dashboard = () => {
         <div className="personal-code">
           <p className="personal-code-header">your personal code</p>
           <p>
-            <span ref={soketId}>{AppGlobalData.state.sockitId}</span>
+            <span ref={mySoket}>
+              {AppGlobalData.state.sockitId ? (
+                AppGlobalData.state.sockitId
+              ) : (
+                <div className="conn-fail">
+                  <AiFillExclamationCircle />
+                  connection fail try again later
+                </div>
+              )}
+            </span>
+
             <button onClick={copyText} className="copy-icon">
-              <MdOutlineContentCopy />
+              {!AppGlobalData.state.sockitId ? ' ' : <MdOutlineContentCopy />}
             </button>
           </p>
         </div>
         <div className="meeting-code">
           <label>meeting code</label>
-          <input type="text" placeholder="hjbbfdndnknz5sg"></input>
+          <input ref={callee} type="text" placeholder="hjbbfdndnknz5sg"></input>
         </div>
         <div className="chat-call">
-          <button>
+          <button onClick={sendChatOffer}>
             Chat
             <MdChat />
           </button>
@@ -66,7 +104,7 @@ const Dashboard = () => {
           </button>
         </div>
         <div className="checkbox">
-          <input type="checkbox"></input>
+          <input ref={inputPersonalCode} type="checkbox"></input>
           <label>Allow Stranger to enetr the meeting </label>
         </div>
       </section>
@@ -103,6 +141,13 @@ const Wrapper = styled.div`
       background: rgb(255, 255, 255, 0.1);
       border-radius: 10px;
       padding: 7px;
+      .conn-fail {
+        display: flex;
+        align-items: center;
+        svg {
+          color: #f2c802;
+        }
+      }
       .personal-code-header {
         font-weight: bold;
         text-transform: capitalize;
@@ -173,6 +218,9 @@ const Wrapper = styled.div`
         color: white;
       }
     }
+  }
+  display-none {
+    display: none;
   }
 `;
 export default Dashboard;
