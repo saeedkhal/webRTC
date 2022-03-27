@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { MdOutlineContentCopy } from 'react-icons/md';
 import { GiBrain } from 'react-icons/gi';
-import { MdChat } from 'react-icons/md';
+import { MdChat, MdErrorOutline } from 'react-icons/md';
 import { BiVideoRecording } from 'react-icons/bi';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { AppContext } from '../Context';
@@ -11,21 +11,6 @@ import { io } from 'socket.io-client';
 
 const Dashboard = () => {
   const AppGlobalData = useContext(AppContext);
-
-  useEffect(() => {
-    const socket = io('ws://127.0.0.1:1024');
-
-    socket.on('connect', () => {
-      console.log('socket connected');
-      AppGlobalData.upadteSocketId(socket.id);
-      AppGlobalData.setSocket(socket);
-      socket.on('pre-offer', (data) => {
-        console.log(data);
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const mySoket = useRef();
   const inputPersonalCode = useRef();
   const callee = useRef();
@@ -36,20 +21,51 @@ const Dashboard = () => {
     chatStanger: 'chatStanger',
     videoStranger: 'videoStranger',
   };
+  useEffect(() => {
+    const socket = io('ws://127.0.0.1:1024');
+
+    socket.on('connect', () => {
+      console.log('socket connected');
+      AppGlobalData.upadteSocketId(socket.id);
+      AppGlobalData.setSocket(socket);
+      socket.on('pre-offer', (data) => {
+        incomingCallHandeller(data);
+      });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const [error, setError] = useState({
+    pass: true,
+    message: ' ',
+  });
+  const incomingCallHandeller = (data) => {
+    const { connectionType } = data;
+    if (connectionType === cnnectionTypes.chat || cnnectionTypes.video)
+      AppGlobalData.setinComingCall(true);
+    AppGlobalData.setCallerData(data);
+  };
   const copyText = () => {
     navigator.clipboard.writeText(mySoket.current.innerHTML);
   };
   const sendChatOffer = () => {
     const calleeId = callee.current.value;
+    if (!calleeId) {
+      return setError({
+        pass: false,
+        message: 'empty input please enter the id',
+      });
+    }
     const data = {
       connectionType: cnnectionTypes.chat,
       calleeId: calleeId,
     };
     AppGlobalData.socket.emit('pre-offer', data);
+    AppGlobalData.setSendingCall(true);
+    setError({
+      pass: true,
+    });
   };
-  const sendVideoOffer = () => {};
-  const sendStrangerChatOffer = () => {};
-  const sendStrangerVideoOffer = () => {};
+
   return (
     <Wrapper>
       <section className="ccc">
@@ -79,6 +95,10 @@ const Dashboard = () => {
         <div className="meeting-code">
           <label>meeting code</label>
           <input ref={callee} type="text" placeholder="hjbbfdndnknz5sg"></input>
+          <p className="error-message">
+            {!error.pass ? <MdErrorOutline /> : ' '}
+            {!error.pass ? error.message : ' '}
+          </p>
         </div>
         <div className="chat-call">
           <button onClick={sendChatOffer}>
@@ -180,10 +200,16 @@ const Wrapper = styled.div`
         border: 1px solid #8f9bd0;
         padding: 5px;
         outline: none !important;
-
+        width: 100%;
         :focus {
           border: 1px solid white;
         }
+      }
+      .error-message {
+        margin: 0;
+        color: #f01d41;
+        display: flex;
+        align-items: center;
       }
     }
     .chat-call {

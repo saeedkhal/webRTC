@@ -5,7 +5,7 @@ import Dashboard from './Components/Dashboard';
 import Messanger from './Components/Messanger';
 import VideoCall from './Components/VideoCall';
 import CallRequest from './Components/CallRequest';
-
+import CallSending from './Components/CallSending';
 function App() {
   return (
     <Wrapper className="App">
@@ -13,6 +13,7 @@ function App() {
         <Dashboard />
         <VideoCall />
         <Messanger />
+        <CallSending />
         <CallRequest />
       </main>
     </Wrapper>

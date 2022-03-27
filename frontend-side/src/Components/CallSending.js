@@ -2,35 +2,27 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { MdPhoneCallback } from 'react-icons/md';
 import { HiPhoneMissedCall } from 'react-icons/hi';
-import call from '../images/phone-pulse.gif';
+import loading from '../images/loading.gif';
 import { AppContext } from '../Context';
 
-const CallRequest = () => {
+const CallSending = () => {
   const AppGlobalData = useContext(AppContext);
-  const { inComingCall, setinComingCall, callerData } = AppGlobalData;
-  const { connectionType } = callerData;
-  const acceptCall = () => {
-    setinComingCall(false);
+  const { setSendingCall, sendingCall } = AppGlobalData;
+  const endCalling = () => {
+    setSendingCall(false);
   };
-  const rejectCall = () => {
-    setinComingCall(false);
-  };
-
   return (
     <Wrapper>
       <div
-        className={inComingCall ? 'call-request' : 'call-request display-none'}
+        className={sendingCall ? 'call-request' : 'call-request display-none'}
       >
         <div className="call-conatiner">
-          incoming {connectionType} request
+          Calling ....
           <p className="call-icon">
-            <img src={call} alt="icon" />
+            <img src={loading} alt="icon" />
           </p>
           <div className="res-rej-btn">
-            <button onClick={acceptCall}>
-              <MdPhoneCallback />
-            </button>
-            <button onClick={rejectCall}>
+            <button onClick={endCalling}>
               <HiPhoneMissedCall />
             </button>
           </div>
@@ -49,7 +41,7 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     top: 0;
-    left: 0;
+    left: 0px;
     height: 100vh;
     transition: 0.5;
     .call-conatiner {
@@ -57,10 +49,14 @@ const Wrapper = styled.div`
       padding: 20px;
       .call-icon {
         text-align: center;
-        padding: 0;
+        padding: 20px 100px;
         margin: 0;
         margin-bottom: 20px;
+        margin: 20px;
+
         img {
+          width: 103px;
+          height: 83px;
           border-radius: 10px;
         }
       }
@@ -71,21 +67,17 @@ const Wrapper = styled.div`
           display: flex;
           align-items: center;
           border: none;
-          padding: 15px;
+          padding: 10px 40px;
           font-size: 20px;
-          background: #6de16d;
+          background: #ee5959;
           color: white;
           margin-bottom: 20px;
-          border-radius: 50%;
+          border-radius: 5px;
           opacity: 0.7;
           transition: 0.3s;
           cursor: pointer;
           :hover {
             opacity: 1;
-          }
-          &:nth-child(2) {
-            margin-left: 20px;
-            background: #ee5959;
           }
         }
       }
@@ -100,4 +92,4 @@ const Wrapper = styled.div`
   }
 `;
 
-export default CallRequest;
+export default CallSending;

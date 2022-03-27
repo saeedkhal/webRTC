@@ -1,4 +1,4 @@
-const { handleConnection } = require('./Controller/connectionController.js');
+const { handelEvents } = require('./Controller/eventsController');
 
 const express = require('express');
 const http = require('http');
@@ -16,11 +16,13 @@ const io = require('socket.io')(server, {
   },
 });
 
-// app.use(express.static('public'));
-// app.get('/', (req, res) => {
-//   res.sendFile('./public/index.html');
-// });
-io.on('connection', handleConnection);
+global.peersConneted = [];
+io.on('connection', (socket) => {
+  peersConneted.push(socket.id);
+  handelEvents(io, socket);
+
+  console.log(peersConneted);
+});
 server.listen(PORT, () => {
   console.log(`listen on port ${PORT}`);
 });

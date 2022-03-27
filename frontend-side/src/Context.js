@@ -47,6 +47,10 @@ export const AppProvider = ({ children }) => {
     allowConnectionFromStrangers: false,
   });
   const [socket, setSocket] = useState();
+  const [callerData, setCallerData] = useState({});
+  const [inComingCall, setinComingCall] = useState(false);
+  const [sendingCall, setSendingCall] = useState(false);
+
   return (
     <AppContext.Provider
       value={{
@@ -59,6 +63,12 @@ export const AppProvider = ({ children }) => {
         UpdateAllowConnectionFromStrangers,
         socket,
         setSocket,
+        callerData,
+        setCallerData,
+        inComingCall,
+        setinComingCall,
+        sendingCall,
+        setSendingCall,
       }}
     >
       {children}
