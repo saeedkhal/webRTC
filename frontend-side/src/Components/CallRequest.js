@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import { MdPhoneCallback } from 'react-icons/md';
 import { HiPhoneMissedCall } from 'react-icons/hi';
 import call from '../images/phone-pulse.gif';
-import { AppContext } from '../Context';
+import { AppContext } from '../context';
 
 const CallRequest = () => {
   const AppGlobalData = useContext(AppContext);
-  const { inComingCall, setinComingCall, callerData } = AppGlobalData;
+  const { inComingCall, callerData, updateIncomingCall } = AppGlobalData;
   const { connectionType } = callerData;
   const acceptCall = () => {
-    setinComingCall(false);
+    updateIncomingCall(false);
   };
   const rejectCall = () => {
-    setinComingCall(false);
+    updateIncomingCall(false);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { MdOutlineContentCopy } from 'react-icons/md';
@@ -6,43 +6,45 @@ import { GiBrain } from 'react-icons/gi';
 import { MdChat, MdErrorOutline } from 'react-icons/md';
 import { BiVideoRecording } from 'react-icons/bi';
 import { AiFillExclamationCircle } from 'react-icons/ai';
-import { AppContext } from '../Context';
+import { AppContext } from '../context';
 import { io } from 'socket.io-client';
-
+const cnnectionTypes = {
+  chat: 'chat',
+  video: 'video',
+  chatStanger: 'chatStanger',
+  videoStranger: 'videoStranger',
+};
 const Dashboard = () => {
   const AppGlobalData = useContext(AppContext);
+  const {
+    updateSocket,
+    updateIncomingCall,
+    updateCallerData,
+    updatSendingCall,
+    updateError,
+    socket,
+    error,
+  } = AppGlobalData;
   const mySoket = useRef();
   const inputPersonalCode = useRef();
   const callee = useRef();
-
-  const cnnectionTypes = {
-    chat: 'chat',
-    video: 'video',
-    chatStanger: 'chatStanger',
-    videoStranger: 'videoStranger',
-  };
   useEffect(() => {
     const socket = io('ws://127.0.0.1:1024');
-
     socket.on('connect', () => {
       console.log('socket connected');
-      AppGlobalData.upadteSocketId(socket.id);
-      AppGlobalData.setSocket(socket);
+      updateSocket(socket);
       socket.on('pre-offer', (data) => {
         incomingCallHandeller(data);
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [error, setError] = useState({
-    pass: true,
-    message: ' ',
-  });
+
   const incomingCallHandeller = (data) => {
     const { connectionType } = data;
     if (connectionType === cnnectionTypes.chat || cnnectionTypes.video)
-      AppGlobalData.setinComingCall(true);
-    AppGlobalData.setCallerData(data);
+      updateIncomingCall(true);
+    updateCallerData(data);
   };
   const copyText = () => {
     navigator.clipboard.writeText(mySoket.current.innerHTML);
@@ -50,7 +52,7 @@ const Dashboard = () => {
   const sendChatOffer = () => {
     const calleeId = callee.current.value;
     if (!calleeId) {
-      return setError({
+      return updateError({
         pass: false,
         message: 'empty input please enter the id',
       });
@@ -59,9 +61,9 @@ const Dashboard = () => {
       connectionType: cnnectionTypes.chat,
       calleeId: calleeId,
     };
-    AppGlobalData.socket.emit('pre-offer', data);
-    AppGlobalData.setSendingCall(true);
-    setError({
+    socket.emit('pre-offer', data);
+    updatSendingCall(true);
+    updateError({
       pass: true,
     });
   };
@@ -77,8 +79,8 @@ const Dashboard = () => {
           <p className="personal-code-header">your personal code</p>
           <p>
             <span ref={mySoket}>
-              {AppGlobalData.state.sockitId ? (
-                AppGlobalData.state.sockitId
+              {socket ? (
+                socket.id
               ) : (
                 <div className="conn-fail">
                   <AiFillExclamationCircle />
@@ -88,7 +90,7 @@ const Dashboard = () => {
             </span>
 
             <button onClick={copyText} className="copy-icon">
-              {!AppGlobalData.state.sockitId ? ' ' : <MdOutlineContentCopy />}
+              {!socket ? ' ' : <MdOutlineContentCopy />}
             </button>
           </p>
         </div>
