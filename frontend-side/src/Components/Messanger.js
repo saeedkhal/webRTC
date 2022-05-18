@@ -5,28 +5,16 @@ const Messanger = () => {
   return (
     <Wrapper>
       <div className="message-container">
-        <section className="local-message">
-          <span>local- message</span>
-        </section>
-        <section className="remote-message">
-          <span>
-            remote message remote message remote message remote message remote
-            message
-          </span>
-        </section>
-        <section className="remote-message">
-          <span>
-            remote message remote message remote message remote message remote
-            message
-          </span>
-        </section>{' '}
-        <section className="remote-message">
-          <span>
-            remote message remote message remote message remote message remote
-            message
-          </span>
-        </section>{' '}
-        <section className="send">
+        <article className="local-message">
+          <span>hi</span>
+        </article>
+        <article className="remote-message">
+          <span>hi</span>
+        </article>
+        <article className="remote-message">
+          <span>how are u ?</span>
+        </article>{' '}
+        <article className="send">
           <div className="send-contianer">
             <input
               className="message"
@@ -37,7 +25,7 @@ const Messanger = () => {
               <AiOutlineSend />
             </button>
           </div>
-        </section>
+        </article>
       </div>
     </Wrapper>
   );
@@ -49,9 +37,8 @@ const Wrapper = styled.div`
     position: relative;
     padding: 20px;
     box-sizing: border-box;
-    section {
-      margin-bottom: 20px;
-      width: 80%;
+    article {
+      margin-bottom: 10px;
       span {
         background: #eee;
         padding: 10px;
@@ -60,8 +47,8 @@ const Wrapper = styled.div`
       }
     }
     .remote-message {
-      margin-left: auto;
-
+      float: right;
+      clear: both;
       span {
         background: #01b5e7;
         color: white;

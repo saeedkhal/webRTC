@@ -1,5 +1,8 @@
-import React, { createContext, useReducer, useState } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
 import reducer from './reducer';
+import { io } from 'socket.io-client';
+import cnnectionTypes from './utils/connectionTypes';
+import responseTypes from './utils/responseTypes';
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
@@ -18,6 +21,7 @@ export const AppProvider = ({ children }) => {
       message: ' ',
     },
   };
+
   const [state, dispach] = useReducer(reducer, intialState);
 
   const updateLoacalStream = (loacalStream) => {
@@ -68,6 +72,32 @@ export const AppProvider = ({ children }) => {
       type: 'UPDATE_ERROR',
       pyload: error,
     });
+  };
+  useEffect(() => {
+    const socket = io('ws://127.0.0.1:1024');
+    socket.on('connect', () => {
+      console.log('socket connected');
+      updateSocket(socket);
+      socket.on('pre-offer', incomingCallHandeller);
+      socket.on('answar-pre-offer', answarPreOffer);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const answarPreOffer = (data) => {
+    updatSendingCall(false);
+    const { preOfferAnswer } = data;
+    if (preOfferAnswer === responseTypes.accepted) {
+    } else if (preOfferAnswer === responseTypes.notavailable) {
+    } else if (preOfferAnswer === responseTypes.notfound) {
+    } else if (preOfferAnswer === responseTypes.rejected) {
+    }
+  };
+  const incomingCallHandeller = (data) => {
+    const { connectionType } = data;
+    if (connectionType === cnnectionTypes.chat || cnnectionTypes.video) {
+      updateIncomingCall(true);
+    }
+    updateCallerData(data);
   };
   return (
     <AppContext.Provider

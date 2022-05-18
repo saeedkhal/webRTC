@@ -1,16 +1,13 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { MdPhoneCallback } from 'react-icons/md';
+// import { MdPhoneCallback } from 'react-icons/md';
 import { HiPhoneMissedCall } from 'react-icons/hi';
 import loading from '../images/loading.gif';
 import { AppContext } from '../context';
 
 const CallSending = () => {
   const AppGlobalData = useContext(AppContext);
-  const {
-    sendingCall ,
-    updatSendingCall,
-  } = AppGlobalData;
+  const { sendingCall, updatSendingCall } = AppGlobalData;
   const endCalling = () => {
     updatSendingCall(false);
   };

@@ -9,17 +9,17 @@ const VideoCall = () => {
   return (
     <Wrapper>
       <div>
-        <section className="starter-bg">
+        <article className="starter-bg">
           <span className="starter-icon">
             <BsPersonCircle />
           </span>
-          <section className="localvideo diplay-none">
+          <article className="localvideo diplay-none">
             <video autoPlay muted className="lv"></video>
-          </section>
-          <section className="remote-video diplay-none">
+          </article>
+          <article className="remote-video diplay-none">
             <video autoPlay></video>
-          </section>
-          <scetion className="video-btns diplay-none">
+          </article>
+          <section className="video-btns diplay-none">
             <button className="audio-btn">
               <AiOutlineAudioMuted />
             </button>
@@ -36,8 +36,8 @@ const VideoCall = () => {
             <button className="audio-btn">
               <RiRecordCircleFill />
             </button>
-          </scetion>
-        </section>
+          </section>
+        </article>
       </div>
     </Wrapper>
   );

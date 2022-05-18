@@ -4,15 +4,20 @@ import { MdPhoneCallback } from 'react-icons/md';
 import { HiPhoneMissedCall } from 'react-icons/hi';
 import call from '../images/phone-pulse.gif';
 import { AppContext } from '../context';
+import responseTypes from '../utils/responseTypes';
 
 const CallRequest = () => {
   const AppGlobalData = useContext(AppContext);
-  const { inComingCall, callerData, updateIncomingCall } = AppGlobalData;
+  const { inComingCall, callerData, updateIncomingCall, socket } =
+    AppGlobalData;
   const { connectionType } = callerData;
-  const acceptCall = () => {
-    updateIncomingCall(false);
-  };
-  const rejectCall = () => {
+  const resonedToCall = (response) => {
+    const data = {
+      callerId: callerData.callerId,
+      preOfferAnswer:
+        response === 'accept' ? responseTypes.accepted : responseTypes.rejected,
+    };
+    socket.emit('answar-pre-offer', data);
     updateIncomingCall(false);
   };
 
@@ -27,10 +32,10 @@ const CallRequest = () => {
             <img src={call} alt="icon" />
           </p>
           <div className="res-rej-btn">
-            <button onClick={acceptCall}>
+            <button onClick={() => resonedToCall('accept')}>
               <MdPhoneCallback />
             </button>
-            <button onClick={rejectCall}>
+            <button onClick={() => resonedToCall('reject')}>
               <HiPhoneMissedCall />
             </button>
           </div>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import { MdOutlineContentCopy } from 'react-icons/md';
@@ -7,45 +7,15 @@ import { MdChat, MdErrorOutline } from 'react-icons/md';
 import { BiVideoRecording } from 'react-icons/bi';
 import { AiFillExclamationCircle } from 'react-icons/ai';
 import { AppContext } from '../context';
-import { io } from 'socket.io-client';
-const cnnectionTypes = {
-  chat: 'chat',
-  video: 'video',
-  chatStanger: 'chatStanger',
-  videoStranger: 'videoStranger',
-};
+import cnnectionTypes from '../utils/connectionTypes';
+
 const Dashboard = () => {
   const AppGlobalData = useContext(AppContext);
-  const {
-    updateSocket,
-    updateIncomingCall,
-    updateCallerData,
-    updatSendingCall,
-    updateError,
-    socket,
-    error,
-  } = AppGlobalData;
+  const { updatSendingCall, updateError, socket, error } = AppGlobalData;
   const mySoket = useRef();
   const inputPersonalCode = useRef();
   const callee = useRef();
-  useEffect(() => {
-    const socket = io('ws://127.0.0.1:1024');
-    socket.on('connect', () => {
-      console.log('socket connected');
-      updateSocket(socket);
-      socket.on('pre-offer', (data) => {
-        incomingCallHandeller(data);
-      });
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  const incomingCallHandeller = (data) => {
-    const { connectionType } = data;
-    if (connectionType === cnnectionTypes.chat || cnnectionTypes.video)
-      updateIncomingCall(true);
-    updateCallerData(data);
-  };
   const copyText = () => {
     navigator.clipboard.writeText(mySoket.current.innerHTML);
   };
@@ -70,7 +40,7 @@ const Dashboard = () => {
 
   return (
     <Wrapper>
-      <section className="ccc">
+      <article className="ccc">
         <div className="logo">
           <GiBrain />
         </div>
@@ -82,10 +52,10 @@ const Dashboard = () => {
               {socket ? (
                 socket.id
               ) : (
-                <div className="conn-fail">
+                <span className="conn-fail">
                   <AiFillExclamationCircle />
                   connection fail try again later
-                </div>
+                </span>
               )}
             </span>
 
@@ -129,13 +99,13 @@ const Dashboard = () => {
           <input ref={inputPersonalCode} type="checkbox"></input>
           <label>Allow Stranger to enetr the meeting </label>
         </div>
-      </section>
+      </article>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  section {
+  article {
     border-radius: 2px;
     padding: 20px;
     background: rgb(2, 0, 36);

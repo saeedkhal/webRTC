@@ -18,11 +18,19 @@ exports.handelEvents = (io, socket) => {
         connectionType: connectionType,
         callerId: socket.id,
       };
-      console.log('apccepted the call');
       io.to(callee).emit('pre-offer', data);
     }
   };
-
+  const handelPreOfferAnswar = (data) => {
+    const { callerId } = data;
+    const caller = peersConneted.find((peerConneted) => {
+      return peerConneted == callerId;
+    });
+    if (caller) {
+      io.to(caller).emit('answar-pre-offer', data);
+    }
+  };
   socket.on('disconnect', handelDisconnect);
   socket.on('pre-offer', handelPreOffer);
+  socket.on('answar-pre-offer', handelPreOfferAnswar);
 };
