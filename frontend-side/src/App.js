@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import Dashboard from './Components/Dashboard';
 import Messanger from './Components/Messanger';
 import VideoCall from './Components/VideoCall';
-import CallRequest from './Components/CallRequest';
+import CallResponse from './Components/CallResponse';
 import CallSending from './Components/CallSending';
+import DialogResponse from './Components/DialogResponse';
 function App() {
   return (
     <Wrapper className="App">
@@ -14,7 +15,8 @@ function App() {
         <VideoCall />
         <Messanger />
         <CallSending />
-        <CallRequest />
+        <CallResponse />
+        <DialogResponse />
       </main>
     </Wrapper>
   );

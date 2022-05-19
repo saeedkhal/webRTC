@@ -20,6 +20,8 @@ const reducer = (state, action) => {
       return { ...state, sendingCall: action.pyload };
     case 'UPDATE_ERROR':
       return { ...state, error: action.pyload };
+    case 'UPDATE_DIALOG':
+      return { ...state, dialog: action.pyload };
 
     default:
       return state;

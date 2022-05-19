@@ -16,6 +16,11 @@ export const AppProvider = ({ children }) => {
     callerData: {},
     inComingCall: null,
     sendingCall: null,
+    dialog: {
+      show: false,
+      message: '',
+    },
+    dialogMessage: null,
     error: {
       pass: true,
       message: ' ',
@@ -73,6 +78,12 @@ export const AppProvider = ({ children }) => {
       pyload: error,
     });
   };
+  const updateDialog = (Dialog) => {
+    dispach({
+      type: 'UPDATE_DIALOG',
+      pyload: Dialog,
+    });
+  };
   useEffect(() => {
     const socket = io('ws://127.0.0.1:1024');
     socket.on('connect', () => {
@@ -83,13 +94,31 @@ export const AppProvider = ({ children }) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const answarPreOffer = (data) => {
     updatSendingCall(false);
     const { preOfferAnswer } = data;
     if (preOfferAnswer === responseTypes.accepted) {
-    } else if (preOfferAnswer === responseTypes.notavailable) {
-    } else if (preOfferAnswer === responseTypes.notfound) {
+      console.log('call accepted');
+      updateDialog({
+        show: true,
+        message: 'your call accepted',
+      });
     } else if (preOfferAnswer === responseTypes.rejected) {
+      updateDialog({
+        show: true,
+        message: 'your call rejected',
+      });
+    } else if (preOfferAnswer === responseTypes.notAvailable) {
+      updateDialog({
+        show: true,
+        message: 'callee not available ',
+      });
+    } else if (preOfferAnswer === responseTypes.notFound) {
+      updateDialog({
+        show: true,
+        message: 'callee not found ',
+      });
     }
   };
   const incomingCallHandeller = (data) => {
@@ -113,6 +142,7 @@ export const AppProvider = ({ children }) => {
         updateCallerData,
         updatSendingCall,
         updateError,
+        updateDialog,
       }}
     >
       {children}

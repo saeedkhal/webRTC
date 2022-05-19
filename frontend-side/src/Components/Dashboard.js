@@ -21,10 +21,17 @@ const Dashboard = () => {
   };
   const sendChatOffer = () => {
     const calleeId = callee.current.value;
+
     if (!calleeId) {
       return updateError({
         pass: false,
         message: 'empty input please enter the id',
+      });
+    }
+    if (calleeId === socket.id) {
+      return updateError({
+        pass: false,
+        message: 'invalid Id',
       });
     }
     const data = {
@@ -122,11 +129,12 @@ const Wrapper = styled.div`
       color: white;
       text-align: center;
       margin-top: 0px;
+      font-size: 20px;
     }
     .logo {
       text-align: center;
       color: white;
-      font-size: 100px;
+      font-size: 70px;
     }
     .personal-code {
       color: white;
@@ -179,7 +187,7 @@ const Wrapper = styled.div`
       }
       .error-message {
         margin: 0;
-        color: #f01d41;
+        color: rgb(253 186 116);
         display: flex;
         align-items: center;
       }

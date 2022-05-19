@@ -1,7 +1,7 @@
 const responseTypes = {
   accepted: 'ACCEPRED',
   rejected: 'REJECTED',
-  notfound: 'NOT_FOUND',
-  notavailable: 'NOT_AVAILABLE',
+  notFound: 'NOT_FOUND',
+  notAvailable: 'NOT_AVAILABLE',
 };
 export default responseTypes;

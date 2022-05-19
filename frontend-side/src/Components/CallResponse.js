@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
 import { MdPhoneCallback } from 'react-icons/md';
+import styled from 'styled-components';
 import { HiPhoneMissedCall } from 'react-icons/hi';
-import call from '../images/phone-pulse.gif';
 import { AppContext } from '../context';
 import responseTypes from '../utils/responseTypes';
+import call from '../images/phone-pulse.gif';
 
 const CallRequest = () => {
   const AppGlobalData = useContext(AppContext);
