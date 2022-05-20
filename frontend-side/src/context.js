@@ -1,21 +1,28 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect, useContext } from 'react';
 import reducer from './reducer';
 import { io } from 'socket.io-client';
-import cnnectionTypes from './utils/connectionTypes';
 import responseTypes from './utils/responseTypes';
+import cnnectionTypes from './utils/connectionTypes';
+import {
+  createPeerConnection,
+  sendwebRTCOffer,
+} from './utils/createPeerConnection';
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const intialState = {
     loacalStream: null,
     remoteStream: null,
+    localDescription: null,
+    remoteDescription: null,
     screenSharing: null,
     screenSharingActive: false,
     allowConnectionFromStrangers: false,
     socket: null,
-    callerData: {},
-    inComingCall: null,
-    sendingCall: null,
+    connectedUserId: '',
+    connectionType: '',
+    inComingCall: false,
+    sendingCall: false,
     dialog: {
       show: false,
       message: '',
@@ -25,10 +32,10 @@ export const AppProvider = ({ children }) => {
       pass: true,
       message: ' ',
     },
+    isConnected: false,
   };
 
   const [state, dispach] = useReducer(reducer, intialState);
-
   const updateLoacalStream = (loacalStream) => {
     dispach({ type: 'UPDATE_LOCAL_STREAM', pyload: loacalStream });
   };
@@ -42,6 +49,11 @@ export const AppProvider = ({ children }) => {
   const updateScreenSharingActive = (screenSharingActive) => {
     dispach({ type: 'UPDATE_SCREEN_ACTIVE', pyload: screenSharingActive });
   };
+
+  const updateConnectionType = (connectionType) => {
+    dispach({ type: 'UPDATE_CONNECTION_TYPE', pyload: connectionType });
+  };
+
   const updateAllowConnectionFromStrangers = (allowConnectionFromStrangers) => {
     dispach({
       type: 'UPDATE_ALLOW_CONNECTION_FROM_STRANGERS',
@@ -60,10 +72,10 @@ export const AppProvider = ({ children }) => {
       pyload: inComingCall,
     });
   };
-  const updateCallerData = (callerData) => {
+  const updateConnectedUserId = (connectedUserId) => {
     dispach({
-      type: 'UPDATE_CALLER_DATA',
-      pyload: callerData,
+      type: 'UPDATE_USER_ID',
+      pyload: connectedUserId,
     });
   };
   const updatSendingCall = (sendingCall) => {
@@ -84,26 +96,26 @@ export const AppProvider = ({ children }) => {
       pyload: Dialog,
     });
   };
-  useEffect(() => {
-    const socket = io('ws://127.0.0.1:1024');
-    socket.on('connect', () => {
-      console.log('socket connected');
-      updateSocket(socket);
-      socket.on('pre-offer', incomingCallHandeller);
-      socket.on('answar-pre-offer', answarPreOffer);
+  const updateIsConnected = (isConnected) => {
+    dispach({
+      type: 'UPDATE_ISCONNECTED',
+      pyload: isConnected,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
-  const answarPreOffer = (data) => {
+  const recieveAnswarPreOfferHandler = (data) => {
     updatSendingCall(false);
     const { preOfferAnswer } = data;
+    console.log(data);
     if (preOfferAnswer === responseTypes.accepted) {
       console.log('call accepted');
       updateDialog({
         show: true,
         message: 'your call accepted',
       });
+      updateIsConnected(true);
+      createPeerConnection();
+      sendwebRTCOffer();
     } else if (preOfferAnswer === responseTypes.rejected) {
       updateDialog({
         show: true,
@@ -122,12 +134,27 @@ export const AppProvider = ({ children }) => {
     }
   };
   const incomingCallHandeller = (data) => {
-    const { connectionType } = data;
+    // data = connectionType: "chat", callerId: "13dPThXR0D5bvaZbAAAL"
+    const { connectionType, callerId } = data;
+    updateConnectedUserId(callerId);
+    updateConnectionType(connectionType);
     if (connectionType === cnnectionTypes.chat || cnnectionTypes.video) {
       updateIncomingCall(true);
     }
-    updateCallerData(data);
   };
+
+  useEffect(() => {
+    const socket = io('ws://127.0.0.1:1024');
+    socket.on('connect', () => {
+      console.log('socket connected');
+      updateSocket(socket);
+      //all events recevied from server
+      socket.on('pre-offer', incomingCallHandeller);
+      socket.on('answar-pre-offer', recieveAnswarPreOfferHandler);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
@@ -137,15 +164,21 @@ export const AppProvider = ({ children }) => {
         upadteScreenSharing,
         updateScreenSharingActive,
         updateAllowConnectionFromStrangers,
+        updateConnectionType,
         updateSocket,
         updateIncomingCall,
-        updateCallerData,
+        updateConnectedUserId,
         updatSendingCall,
         updateError,
         updateDialog,
+        updateIsConnected,
       }}
     >
       {children}
     </AppContext.Provider>
   );
+};
+//custom hook
+export const GlobalData = () => {
+  return useContext(AppContext);
 };

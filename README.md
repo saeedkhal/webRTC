@@ -1,40 +1,42 @@
 # online-meeting
 
-## to start the app 
+## to start the app
 
-1.clone  repo 
+1.clone repo
+
 ```sh
-  git clone https://github.com/saeedkhal/webRTC.git 
+  git clone https://github.com/saeedkhal/webRTC.git
 ```
+
 2.run server
 
-* get into server folder
-    ```sh
-    cd server
-    ```
-* install dependancy
+- get into server folder
   ```sh
-    npm install 
+  cd server
   ```
-* install finally run server
+- install dependancy
   ```sh
-    nodemon server.js 
+    npm install
   ```
-3-run front-end 
-  * got back to the root folder
+- install finally run server
+  ```sh
+    nodemon server.js
+  ```
+  3-run front-end
+  - got back to the root folder
     ```sh
     cd ..
     ```
-  * got get into front-end folder
+  - got get into front-end folder
     ```sh
     cd frontend-side
     ```
-  * install dependancy
+  - install dependancy
     ```sh
-      npm install 
+      npm install
     ```
-  * install finally run server
+  - install finally run server
     ```sh
-      npm start 
+      npm start
     ```
-  
+    ![video chat app](./front%20end%20part.png)

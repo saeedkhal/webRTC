@@ -1,22 +1,32 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { MdPhoneCallback } from 'react-icons/md';
 import styled from 'styled-components';
 import { HiPhoneMissedCall } from 'react-icons/hi';
-import { AppContext } from '../context';
+import { GlobalData } from '../context';
 import responseTypes from '../utils/responseTypes';
 import call from '../images/phone-pulse.gif';
+import { createPeerConnection } from '../utils/createPeerConnection';
 
-const CallRequest = () => {
-  const AppGlobalData = useContext(AppContext);
-  const { inComingCall, callerData, updateIncomingCall, socket } =
-    AppGlobalData;
-  const { connectionType } = callerData;
+const CallResponse = () => {
+  const AppGlobalData = GlobalData();
+  const {
+    inComingCall,
+    updateIncomingCall,
+    socket,
+    updateIsConnected,
+    connectedUserId,
+    connectionType,
+  } = AppGlobalData;
+  // const { connectionType } = connectedUserData;
   const resonedToCall = (response) => {
     const data = {
-      callerId: callerData.callerId,
+      callerId: connectedUserId,
       preOfferAnswer:
         response === 'accept' ? responseTypes.accepted : responseTypes.rejected,
     };
+    if (response === 'accept') {
+      updateIsConnected(true);
+    }
     socket.emit('answar-pre-offer', data);
     updateIncomingCall(false);
   };
@@ -105,4 +115,4 @@ const Wrapper = styled.div`
   }
 `;
 
-export default CallRequest;
+export default CallResponse;

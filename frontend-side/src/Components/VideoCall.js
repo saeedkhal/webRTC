@@ -4,7 +4,7 @@ import { BsPersonCircle } from 'react-icons/bs';
 import { AiOutlineAudioMuted, AiFillCamera } from 'react-icons/ai';
 import { MdCallEnd } from 'react-icons/md';
 import { RiRecordCircleFill, RiCameraSwitchLine } from 'react-icons/ri';
-
+import Localvideo from './Localvideo';
 const VideoCall = () => {
   return (
     <Wrapper>
@@ -39,6 +39,7 @@ const VideoCall = () => {
           </section>
         </article>
       </div>
+      <Localvideo />
     </Wrapper>
   );
 };

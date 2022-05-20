@@ -14,15 +14,18 @@ const reducer = (state, action) => {
       return { ...state, socket: action.pyload };
     case 'UPDATE_INCOMING_CALL':
       return { ...state, inComingCall: action.pyload };
-    case 'UPDATE_CALLER_DATA':
-      return { ...state, callerData: action.pyload };
     case 'UPDATE_SENDING_CALL':
       return { ...state, sendingCall: action.pyload };
     case 'UPDATE_ERROR':
       return { ...state, error: action.pyload };
     case 'UPDATE_DIALOG':
       return { ...state, dialog: action.pyload };
-
+    case 'UPDATE_ISCONNECTED':
+      return { ...state, isConnected: action.pyload };
+    case 'UPDATE_CONNECTION_TYPE':
+      return { ...state, connectionType: action.pyload };
+    case 'UPDATE_USER_ID':
+      return { ...state, connectedUserId: action.pyload };
     default:
       return state;
   }

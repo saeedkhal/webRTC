@@ -33,6 +33,7 @@ const Messanger = () => {
 const Wrapper = styled.div`
   max-height: 100vh;
   overflow-y: scroll;
+  background: rgb(241 245 249);
   .message-container {
     position: relative;
     padding: 20px;

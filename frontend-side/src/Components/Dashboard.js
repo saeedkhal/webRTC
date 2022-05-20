@@ -11,7 +11,8 @@ import cnnectionTypes from '../utils/connectionTypes';
 
 const Dashboard = () => {
   const AppGlobalData = useContext(AppContext);
-  const { updatSendingCall, updateError, socket, error } = AppGlobalData;
+  const { updatSendingCall, updateError, socket, error, isConnected } =
+    AppGlobalData;
   const mySoket = useRef();
   const inputPersonalCode = useRef();
   const callee = useRef();
@@ -36,7 +37,7 @@ const Dashboard = () => {
     }
     const data = {
       connectionType: cnnectionTypes.chat,
-      calleeId: calleeId,
+      calleeId: calleeId, //calee is the recevier
     };
     socket.emit('pre-offer', data);
     updatSendingCall(true);
@@ -47,7 +48,7 @@ const Dashboard = () => {
 
   return (
     <Wrapper>
-      <article className="ccc">
+      <article>
         <div className="logo">
           <GiBrain />
         </div>
@@ -107,11 +108,13 @@ const Dashboard = () => {
           <label>Allow Stranger to enetr the meeting </label>
         </div>
       </article>
+      <article className={!isConnected ? 'display-none' : 'disable'}></article>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  position: relative;
   article {
     border-radius: 2px;
     padding: 20px;
@@ -225,7 +228,17 @@ const Wrapper = styled.div`
       }
     }
   }
-  display-none {
+  .disable {
+    top: 0;
+    left: 0;
+    z-index: 10;
+    background: transparent;
+    position: absolute;
+    width: 100%;
+    background: black;
+    opacity: 0.5;
+  }
+  .display-none {
     display: none;
   }
 `;
