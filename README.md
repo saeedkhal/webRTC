@@ -41,6 +41,9 @@
     ```
     ![video chat app](./front%20end%20part.png)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 3f9e47c9ad3fb22bf8f29acf8798c2e12fef2b9d
   
 >>>>>>> 3f9e47c9ad3fb22bf8f29acf8798c2e12fef2b9d
