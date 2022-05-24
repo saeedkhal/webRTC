@@ -13,10 +13,9 @@ function Localvideo() {
       .then((stream) => {
         localVideo.current.addEventListener('loadedmetadata', () => {
           localVideo.current.play();
-          console.log(localVideo.current);
         });
         updateLoacalStream(stream);
-        //localVideo.current.srcObject = stream;
+        localVideo.current.srcObject = stream;
       })
       .catch((err) => {
         console.log('error while video stream ');
@@ -29,7 +28,7 @@ function Localvideo() {
   return (
     <Wrapper>
       <main className="local-container">
-        <video ref={localVideo} className="video"></video>
+        <video muted="true" ref={localVideo} className="video"></video>
       </main>
     </Wrapper>
   );

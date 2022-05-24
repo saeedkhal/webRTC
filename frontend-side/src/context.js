@@ -7,6 +7,7 @@ import {
   createPeerConnection,
   sendwebRTCOffer,
 } from './utils/createPeerConnection';
+import { Peer } from 'peerjs';
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
@@ -142,7 +143,7 @@ export const AppProvider = ({ children }) => {
       updateIncomingCall(true);
     }
   };
-
+  // this use effect for websocket
   useEffect(() => {
     const socket = io('ws://127.0.0.1:1024');
     socket.on('connect', () => {
@@ -155,6 +156,14 @@ export const AppProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  //this use Effect for peerjs
+  useEffect(() => {
+    const peer = new Peer(undefined, {
+      host: '/',
+      port: 1024,
+      path: 'peerjs/video-chat',
+    });
+  }, []);
   return (
     <AppContext.Provider
       value={{

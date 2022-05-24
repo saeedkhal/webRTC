@@ -1,5 +1,5 @@
 const { handelEvents } = require('./Controller/eventsController');
-
+const { ExpressPeerServer } = require('peer');
 const express = require('express');
 const http = require('http');
 
@@ -16,6 +16,14 @@ const io = require('socket.io')(server, {
   },
 });
 
+const peerServer = ExpressPeerServer(server, {
+  path: '/video-chat',
+});
+app.use('/peerjs', peerServer);
+
+peerServer.on('connection', (client) => {
+  console.log('client connected');
+});
 global.peersConneted = [];
 io.on('connection', (socket) => {
   peersConneted.push(socket.id);
