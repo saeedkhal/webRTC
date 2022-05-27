@@ -26,6 +26,8 @@ const reducer = (state, action) => {
       return { ...state, connectionType: action.pyload };
     case 'UPDATE_USER_ID':
       return { ...state, connectedUserId: action.pyload };
+    case 'UPDATE_MY_PEER':
+      return { ...state, myPeer: action.pyload };
     default:
       return state;
   }

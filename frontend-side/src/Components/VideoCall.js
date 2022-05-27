@@ -13,9 +13,6 @@ const VideoCall = () => {
           <span className="starter-icon">
             <BsPersonCircle />
           </span>
-          <article className="localvideo diplay-none">
-            <video autoPlay muted className="lv"></video>
-          </article>
           <article className="remote-video diplay-none">
             <video autoPlay></video>
           </article>

@@ -22,13 +22,12 @@ const peerServer = ExpressPeerServer(server, {
 app.use('/peerjs', peerServer);
 
 peerServer.on('connection', (client) => {
-  console.log('client connected');
+  console.log('peer connected');
 });
 global.peersConneted = [];
 io.on('connection', (socket) => {
   peersConneted.push(socket.id);
   handelEvents(io, socket);
-
   console.log(peersConneted);
 });
 server.listen(PORT, () => {

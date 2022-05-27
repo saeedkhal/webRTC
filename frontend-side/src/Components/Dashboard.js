@@ -11,8 +11,7 @@ import cnnectionTypes from '../utils/connectionTypes';
 
 const Dashboard = () => {
   const AppGlobalData = useContext(AppContext);
-  const { updatSendingCall, updateError, socket, error, isConnected } =
-    AppGlobalData;
+  const { dispach, socket, error, isConnected } = AppGlobalData;
   const mySoket = useRef();
   const inputPersonalCode = useRef();
   const callee = useRef();
@@ -24,13 +23,16 @@ const Dashboard = () => {
     const calleeId = callee.current.value;
 
     if (!calleeId) {
-      return updateError({
-        pass: false,
-        message: 'empty input please enter the id',
+      return dispach({
+        type: 'UPDATE_ERROR',
+        pyload: {
+          pass: false,
+          message: 'empty input please enter the id',
+        },
       });
     }
     if (calleeId === socket.id) {
-      return updateError({
+      return dispach({
         pass: false,
         message: 'invalid Id',
       });
@@ -40,8 +42,12 @@ const Dashboard = () => {
       calleeId: calleeId, //calee is the recevier
     };
     socket.emit('pre-offer', data);
-    updatSendingCall(true);
-    updateError({
+    dispach({
+      type: 'UPDATE_SENDING_CALL',
+      pyload: true,
+    });
+
+    dispach({
       pass: true,
     });
   };

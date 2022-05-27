@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { GlobalData } from '../context';
 function Localvideo() {
-  const { updateLoacalStream } = GlobalData();
+  const { dispach } = GlobalData();
   const localVideo = useRef(null);
   const initaiteLocalVideo = () => {
     navigator.mediaDevices
@@ -14,7 +14,7 @@ function Localvideo() {
         localVideo.current.addEventListener('loadedmetadata', () => {
           localVideo.current.play();
         });
-        updateLoacalStream(stream);
+        dispach({ type: 'UPDATE_LOCAL_STREAM', pyload: stream });
         localVideo.current.srcObject = stream;
       })
       .catch((err) => {
@@ -28,7 +28,7 @@ function Localvideo() {
   return (
     <Wrapper>
       <main className="local-container">
-        <video muted="true" ref={localVideo} className="video"></video>
+        <video muted={true} ref={localVideo} className="video"></video>
       </main>
     </Wrapper>
   );

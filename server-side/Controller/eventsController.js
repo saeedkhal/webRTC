@@ -27,7 +27,6 @@ exports.handelEvents = (io, socket) => {
     }
   };
   const handelPreOfferAnswar = (data) => {
-    console.log(data);
     const { callerId } = data;
     const caller = peersConneted.find((peerConneted) => {
       return peerConneted == callerId;

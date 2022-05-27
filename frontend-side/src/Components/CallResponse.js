@@ -5,30 +5,36 @@ import { HiPhoneMissedCall } from 'react-icons/hi';
 import { GlobalData } from '../context';
 import responseTypes from '../utils/responseTypes';
 import call from '../images/phone-pulse.gif';
-import { createPeerConnection } from '../utils/createPeerConnection';
 
 const CallResponse = () => {
   const AppGlobalData = GlobalData();
   const {
     inComingCall,
-    updateIncomingCall,
     socket,
-    updateIsConnected,
     connectedUserId,
     connectionType,
+    myPeer,
+    dispach,
   } = AppGlobalData;
   // const { connectionType } = connectedUserData;
   const resonedToCall = (response) => {
     const data = {
       callerId: connectedUserId,
+      calleePeerID: myPeer._id,
       preOfferAnswer:
         response === 'accept' ? responseTypes.accepted : responseTypes.rejected,
     };
     if (response === 'accept') {
-      updateIsConnected(true);
+      dispach({
+        type: 'UPDATE_ISCONNECTED',
+        pyload: true,
+      });
     }
     socket.emit('answar-pre-offer', data);
-    updateIncomingCall(false);
+    dispach({
+      type: 'UPDATE_INCOMING_CALL',
+      pyload: false,
+    });
   };
 
   return (

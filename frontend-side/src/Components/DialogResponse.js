@@ -4,28 +4,33 @@ import { AppContext } from '../context';
 
 function DialogResponse() {
   const AppGlobalData = useContext(AppContext);
-  const { dialog, updateDialog } = AppGlobalData;
+  const { dialog, dispach } = AppGlobalData;
   const closeDialog = () => {
-    updateDialog({
-      show: false,
-      message: '',
+    dispach({
+      type: 'UPDATE_DIALOG',
+      pyload: {
+        show: false,
+        message: '',
+      },
     });
   };
   useEffect(() => {
     let timeout;
     if (dialog.message.search(/(accepted)/) !== -1) {
-      console.log(dialog);
       timeout = setTimeout(() => {
-        updateDialog({
-          show: false,
-          message: '',
+        dispach({
+          type: 'UPDATE_DIALOG',
+          pyload: {
+            show: false,
+            message: '',
+          },
         });
       }, 4000);
     }
     return () => {
       clearTimeout(timeout);
     };
-  }, [dialog, updateDialog]);
+  }, [dialog, dispach]);
   return (
     <Wrapper>
       <div
