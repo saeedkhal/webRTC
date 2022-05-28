@@ -74,7 +74,11 @@ const Wrapper = styled.div`
         position: absolute;
         width: 100%;
         height: 100%;
-        background: #eee;
+        video {
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+        }
       }
       .localvideo {
         position: absolute;
@@ -100,7 +104,7 @@ const Wrapper = styled.div`
           border-radius: 50%;
           border: none;
           color: #95939d;
-          background: #242a48;
+          background: transparent;
           translate: 0.3s;
           :hover {
             color: white;
