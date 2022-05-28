@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { BsPersonCircle } from 'react-icons/bs';
 import { AiOutlineAudioMuted, AiFillCamera } from 'react-icons/ai';
 import { MdCallEnd } from 'react-icons/md';
 import { RiRecordCircleFill, RiCameraSwitchLine } from 'react-icons/ri';
 import Localvideo from './Localvideo';
+import { GlobalData } from '../context';
 const VideoCall = () => {
+  const { remoteStream } = GlobalData();
+  const remoteStreamRef = useRef(null);
+  useEffect(() => {
+    if (remoteStream) {
+      remoteStreamRef.current.addEventListener('addedmetadata', () => {
+        remoteStreamRef.current.play();
+      });
+      remoteStreamRef.current.srcObject = remoteStream;
+    }
+  }, [remoteStream]);
   return (
     <Wrapper>
       <div>
@@ -13,8 +24,8 @@ const VideoCall = () => {
           <span className="starter-icon">
             <BsPersonCircle />
           </span>
-          <article className="remote-video diplay-none">
-            <video autoPlay></video>
+          <article className="remote-video">
+            <video ref={remoteStreamRef} muted={true} autoPlay></video>
           </article>
           <section className="video-btns diplay-none">
             <button className="audio-btn">

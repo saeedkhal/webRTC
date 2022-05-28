@@ -5,7 +5,7 @@ import { HiPhoneMissedCall } from 'react-icons/hi';
 import { GlobalData } from '../context';
 import responseTypes from '../utils/responseTypes';
 import call from '../images/phone-pulse.gif';
-
+import { Peer } from 'peerjs';
 const CallResponse = () => {
   const AppGlobalData = GlobalData();
   const {

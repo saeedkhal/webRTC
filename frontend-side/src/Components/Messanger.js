@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { AiOutlineSend } from 'react-icons/ai';
+import { GlobalData } from '../context';
 const Messanger = () => {
+  const { counter, setCounter } = GlobalData();
   return (
     <Wrapper>
       <div className="message-container">
@@ -27,6 +29,8 @@ const Messanger = () => {
           </div>
         </article>
       </div>
+      <button onClick={() => setCounter(counter + 1)}>+</button>
+      <span>{counter}</span>
     </Wrapper>
   );
 };
