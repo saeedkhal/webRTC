@@ -11,7 +11,7 @@ import cnnectionTypes from '../utils/connectionTypes';
 
 const Dashboard = () => {
   const AppGlobalData = useContext(AppContext);
-  const { dispach, socket, error, isConnected } = AppGlobalData;
+  const { dispatch, socket, error, isConnected } = AppGlobalData;
   const mySoket = useRef();
   const inputPersonalCode = useRef();
   const callee = useRef();
@@ -23,7 +23,7 @@ const Dashboard = () => {
     const calleeId = callee.current.value;
 
     if (!calleeId) {
-      return dispach({
+      return dispatch({
         type: 'UPDATE_ERROR',
         pyload: {
           pass: false,
@@ -32,7 +32,7 @@ const Dashboard = () => {
       });
     }
     if (calleeId === socket.id) {
-      return dispach({
+      return dispatch({
         pass: false,
         message: 'invalid Id',
       });
@@ -42,12 +42,12 @@ const Dashboard = () => {
       calleeId: calleeId, //calee is the recevier
     };
     socket.emit('pre-offer', data);
-    dispach({
+    dispatch({
       type: 'UPDATE_SENDING_CALL',
       pyload: true,
     });
 
-    dispach({
+    dispatch({
       pass: true,
     });
   };

@@ -28,6 +28,10 @@ const reducer = (state, action) => {
       return { ...state, connectedUserId: action.pyload };
     case 'UPDATE_MY_PEER':
       return { ...state, myPeer: action.pyload };
+    case 'UPDATE_LOCAL_AUDIO_ENABLE':
+      return { ...state, localAudioEnabled: action.pyload };
+    case 'UPDATE_LOCAL_VIDEO_ENABLE':
+      return { ...state, localVideoEnabled: action.pyload };
     default:
       return state;
   }

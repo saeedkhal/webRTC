@@ -7,9 +7,9 @@ import { AppContext } from '../context';
 
 const CallSending = () => {
   const AppGlobalData = useContext(AppContext);
-  const { sendingCall, dispach } = AppGlobalData;
+  const { sendingCall, dispatch } = AppGlobalData;
   const endCalling = () => {
-    dispach({
+    dispatch({
       type: 'UPDATE_SENDING_CALL',
       pyload: false,
     });

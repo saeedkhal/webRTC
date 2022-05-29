@@ -1,14 +1,51 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { BsPersonCircle } from 'react-icons/bs';
-import { AiOutlineAudioMuted, AiFillCamera } from 'react-icons/ai';
+import { BiCameraOff, BiCamera } from 'react-icons/bi';
+
+import { AiOutlineAudioMuted, AiOutlineAudio } from 'react-icons/ai';
 import { MdCallEnd } from 'react-icons/md';
 import { RiRecordCircleFill, RiCameraSwitchLine } from 'react-icons/ri';
 import Localvideo from './Localvideo';
 import { GlobalData } from '../context';
 const VideoCall = () => {
-  const { remoteStream } = GlobalData();
+  const {
+    remoteStream,
+    loacalStream,
+    localAudioEnabled,
+    localVideoEnabled,
+    dispatch,
+  } = GlobalData();
+  const handleScreenSharing = () => {
+    navigator.mediaDevices
+      .getDisplayMedia({
+        video: true,
+      })
+      .then((stream) => {
+        dispatch({
+          type: 'UPDATE_LOCAL_STREAM',
+          pyload: stream,
+        });
+      });
+  };
   const remoteStreamRef = useRef(null);
+  const handleMicrophone = () => {
+    console.log(loacalStream.getAudioTracks()[0].enabled);
+    loacalStream.getAudioTracks()[0].enabled = !localAudioEnabled;
+    dispatch({
+      type: 'UPDATE_LOCAL_AUDIO_ENABLE',
+      pyload: !localAudioEnabled,
+    });
+  };
+
+  const handelCamera = () => {
+    console.log(loacalStream.getVideoTracks()[0].enabled);
+    loacalStream.getVideoTracks()[0].enabled = !localVideoEnabled;
+    dispatch({
+      type: 'UPDATE_LOCAL_VIDEO_ENABLE',
+      pyload: !localVideoEnabled,
+    });
+  };
   useEffect(() => {
     if (remoteStream) {
       remoteStreamRef.current.addEventListener('addedmetadata', () => {
@@ -28,16 +65,20 @@ const VideoCall = () => {
             <video ref={remoteStreamRef} muted={true} autoPlay></video>
           </article>
           <section className="video-btns diplay-none">
-            <button className="audio-btn">
-              <AiOutlineAudioMuted />
+            <button className="audio-btn" onClick={handleMicrophone}>
+              {localAudioEnabled ? <AiOutlineAudio /> : <AiOutlineAudioMuted />}
             </button>
-            <button className="audio-btn">
-              <AiFillCamera />
+            <button
+              className="audio-btn camera "
+              style={{ transform: 'scaleX(-1)' }}
+              onClick={handelCamera}
+            >
+              {localVideoEnabled ? <BiCamera /> : <BiCameraOff />}
             </button>
             <button className="audio-btn">
               <MdCallEnd />
             </button>
-            <button className="audio-btn">
+            <button className="audio-btn" onClick={handleScreenSharing}>
               <RiCameraSwitchLine />
             </button>
 
@@ -70,6 +111,7 @@ const Wrapper = styled.div`
         font-size: 50px;
         color: white;
       }
+
       .remote-video {
         position: absolute;
         width: 100%;

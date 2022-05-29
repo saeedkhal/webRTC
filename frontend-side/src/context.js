@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useContext,
   useState,
-  useCallback,
   useRef,
 } from 'react';
 import reducer from './reducer';
@@ -20,6 +19,8 @@ export const AppProvider = ({ children }) => {
     remoteStream: null,
     localDescription: null,
     remoteDescription: null,
+    localAudioEnabled: true,
+    localVideoEnabled: true,
     screenSharing: null,
     screenSharingActive: false,
     allowConnectionFromStrangers: false,
@@ -40,44 +41,43 @@ export const AppProvider = ({ children }) => {
     isConnected: false,
     myPeer: {},
   };
-  const [state, dispach] = useReducer(reducer, intialState);
+  const [state, dispatch] = useReducer(reducer, intialState);
   const [counter, setCounter] = useState(0);
   const myPeerRef = useRef('null');
   const localStreamRef = useRef('null');
   myPeerRef.current = state.myPeer;
   localStreamRef.current = state.loacalStream;
   const recieveAnswarPreOfferHandler = (data) => {
-    dispach({
+    dispatch({
       type: 'UPDATE_SENDING_CALL',
       pyload: false,
     });
     const { preOfferAnswer, calleePeerID } = data;
     if (preOfferAnswer === responseTypes.accepted) {
-      dispach({
+      dispatch({
         show: true,
         message: 'your call accepted',
       });
-      dispach({
+      dispatch({
         type: 'UPDATE_ISCONNECTED',
         pyload: true,
       });
       const call = myPeerRef.current.call(calleePeerID, localStreamRef.current);
       call.on('stream', function (stream) {
-        console.log('recevied call answer');
-        dispach({ type: 'UPDATE_REMOTE_STREAM', pyload: stream });
+        dispatch({ type: 'UPDATE_REMOTE_STREAM', pyload: stream });
       });
     } else if (preOfferAnswer === responseTypes.rejected) {
-      dispach({
+      dispatch({
         show: true,
         message: 'your call rejected',
       });
     } else if (preOfferAnswer === responseTypes.notAvailable) {
-      dispach({
+      dispatch({
         show: true,
         message: 'callee not available ',
       });
     } else if (preOfferAnswer === responseTypes.notFound) {
-      dispach({
+      dispatch({
         show: true,
         message: 'callee not found ',
       });
@@ -87,13 +87,13 @@ export const AppProvider = ({ children }) => {
     // data = connectionType: "chat", callerId: "13dPThXR0D5bvaZbAAAL"
     console.log(state);
     const { connectionType, callerId } = data;
-    dispach({
+    dispatch({
       type: 'UPDATE_USER_ID',
       pyload: callerId,
     });
-    dispach({ type: 'UPDATE_CONNECTION_TYPE', pyload: connectionType });
+    dispatch({ type: 'UPDATE_CONNECTION_TYPE', pyload: connectionType });
     if (connectionType === cnnectionTypes.chat || cnnectionTypes.video) {
-      dispach({
+      dispatch({
         type: 'UPDATE_INCOMING_CALL',
         pyload: true,
       });
@@ -104,7 +104,7 @@ export const AppProvider = ({ children }) => {
     const socket = io('ws://127.0.0.1:1024');
     socket.on('connect', () => {
       console.log('socket connected');
-      dispach({
+      dispatch({
         type: 'UPDATE_SOCKET',
         pyload: socket,
       });
@@ -120,7 +120,7 @@ export const AppProvider = ({ children }) => {
       path: 'peerjs/video-chat',
     });
     peer.on('open', () => {
-      dispach({
+      dispatch({
         type: 'UPDATE_MY_PEER',
         pyload: peer,
       });
@@ -129,7 +129,7 @@ export const AppProvider = ({ children }) => {
       console.log('call coming ');
       call.answer(localStreamRef.current);
       call.on('stream', (stream) => {
-        dispach({ type: 'UPDATE_REMOTE_STREAM', pyload: stream });
+        dispatch({ type: 'UPDATE_REMOTE_STREAM', pyload: stream });
       });
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,7 +139,7 @@ export const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         ...state,
-        dispach,
+        dispatch,
         counter,
         setCounter,
       }}

@@ -4,9 +4,9 @@ import { AppContext } from '../context';
 
 function DialogResponse() {
   const AppGlobalData = useContext(AppContext);
-  const { dialog, dispach } = AppGlobalData;
+  const { dialog, dispatch } = AppGlobalData;
   const closeDialog = () => {
-    dispach({
+    dispatch({
       type: 'UPDATE_DIALOG',
       pyload: {
         show: false,
@@ -18,7 +18,7 @@ function DialogResponse() {
     let timeout;
     if (dialog.message.search(/(accepted)/) !== -1) {
       timeout = setTimeout(() => {
-        dispach({
+        dispatch({
           type: 'UPDATE_DIALOG',
           pyload: {
             show: false,
@@ -30,7 +30,7 @@ function DialogResponse() {
     return () => {
       clearTimeout(timeout);
     };
-  }, [dialog, dispach]);
+  }, [dialog, dispatch]);
   return (
     <Wrapper>
       <div
